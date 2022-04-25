@@ -51,24 +51,47 @@
                 {% endfor %}
             </div>
             <!-- Task: show questions and choices -->
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h1>What is DJango?</h1>
-                        <input type="checkbox" value="A web Framework" >
-                        <input type="checkbox" value="A web Framework">
-                    </div>
-                </div>
+
+            {% if user.is_authenticated %}
+            <br>
+            <button data-toggle="collapse" class="btn btn-info btn-block" data-target="#exam">Start Exam</button>
+            <br>
+            <div id="exam" class="collapse">
+            <form id="questionform" action="" method="post">
+                <!--Questions-->
+                 {% for question in course.question_set.all %}
+                       <div id="django">
+                       <div class="card mt-1">
+                            <div class="card-header"><h5>{{ question.text}}</h5></div>
+                            {% csrf_token %}
+                            <div  data-parent="#django" class="form-group">
+                               <!--Choices-->
+                                {% for choice in question.choice_set.all %}
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" name="choice_{{choice.id}}"
+                                               class="form-check-input" id="{{choice.id}}"
+                                               value="{{choice.id}}">{{ choice.choice_text }}
+                                    </label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        </div>
+                        {% endfor %}
+                    <br>
+                    <input class="btn btn-success btn-block" type="submit" value="Submit">
+            </form>
             </div>
+            {% endif %}
+            <!--Not Authenticated-->
+            {% if not user.is_authenticated %}
+                <div class='alert-info'>You are not an authenticated user for these Exam Questions</div> 
+            {% endif %}
+      
             <!-- <HINT> Use Bootstrap Collapse to hide exam first, more details could be found here
             https://www.w3schools.com/bootstrap4/bootstrap_collapse.asp-->
 
-            
-
-        
-            <div id="exam" class="collapse">
-                Click to expand elements within the collapse div
-                </div>
 
         
 
@@ -84,7 +107,7 @@
             <input type="check" name="choice_{{choice.id}}" id="{{choice.id}}" ...>
             -->
 
-            A choice submission form example
+  <!--        A choice submission form example
             <form id="questionform" action="point to a submit view" method="post">
                         ... for each question in the course ...
                         <div class="card mt-1">
@@ -101,7 +124,7 @@
                                 </div>
                             </div>
                         </div>
-                    <input class="btn btn-success btn-block" type="submit" value="Submit">
+                    <input class="btn btn-success btn-block" type="submit" value="Submit">-->  
             </form> 
             <!--Check here to see more details Bootstrap checkbox
              https://www.w3schools.com/bootstrap4/bootstrap_forms_inputs.asp-->
