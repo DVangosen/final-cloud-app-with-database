@@ -75,13 +75,13 @@ class CourseListView(generic.ListView):
     template_name = 'onlinecourse/course_list_bootstrap.html'
     context_object_name = 'course_list'
 
-def get_queryset(self):
-        user = self.request.user
-        courses = Course.objects.order_by('-total_enrollment')[:10]
-        for course in courses:
-            if user.is_authenticated:
-                course.is_enrolled = check_if_enrolled(user, course)
-        return courses
+    def get_queryset(self):
+            user = self.request.user
+            courses = Course.objects.order_by('-total_enrollment')[:10]
+            for course in courses:
+                if user.is_authenticated:
+                    course.is_enrolled = check_if_enrolled(user, course)
+            return courses
 
 
 class CourseDetailView(generic.DetailView):
